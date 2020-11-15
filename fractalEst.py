@@ -38,21 +38,69 @@ for i in range (14):
 print(cadena)"""
 
 
-def dibujarSegmento():
-    print("estoy dibujando")
+pila=[]
+posicion=[400, 599]
+angulo=math.pi
+tamanioRef=4
 
-def guardar():
-    print("estoy apilando")
+class Segmento:
+    def __init__(self, posicion , angulo):
+        self.posicion = posicion
+        self.angulo = angulo
 
-def restaurar():
-    print("estoy desapilando")
 
-def girarIzq():
-    print("estoy girando izq")
+def getLargoSegmento():
+    return random.uniform(0.7,1.3)*tamanioRef
 
-def girarDer():
-    print("estoy girando der")
+def getDesplazamientoX(x , largo, angulo):
+    return x+math.sin(angulo)*largo
 
+def getDesplazamientoY(y , largo, angulo):
+    return y+math.cos(angulo)*largo
+
+def dibujarSegmento(pantalla):
+    #print("estoy dibujando")
+    #posicion[:]
+    largo = getLargoSegmento()
+    posicionFinal = [getDesplazamientoX(posicion[:][0] , largo, angulo),getDesplazamientoY( posicion[:][1] , largo, angulo)]
+    pygame.draw.line(pantalla,(0,0,0), posicion[:], posicionFinal)
+    posicion[:]=posicionFinal
+
+def guardar(pantalla):
+    #print("estoy apilando")
+    global angulo
+    segmento = Segmento(posicion[:],angulo)
+    #print(segmento)
+    pilaInterna = pila[:] 
+    pilaInterna.append(segmento)
+    #print(pilaInterna)
+    pila[:]=pilaInterna
+    #print(pila[:])
+    """pila[:].append(posicion[:])
+    pila[:].append(posicion[:])
+    pila[:].append(angulo)
+    print (posicion[:], angulo)
+    print (pila[:])"""
+def restaurar(pantalla):
+    #print("estoy desapilando")
+    global angulo
+    segmento= pila[:].pop()
+    angulo = segmento.angulo
+    posicion[:] = segmento.posicion
+
+def girarIzq(pantalla):
+    #print("estoy girando izq")
+    global angulo
+    angulo+=random.uniform(0.0,math.pi/6)
+    if (angulo>2*math.pi):
+        angulo= angulo - 2*math.pi
+
+def girarDer(pantalla):
+    #print("estoy girando der")
+    global angulo
+    angulo-=random.uniform(0.0,math.pi/6)
+    if (angulo<0):
+        angulo= 2*math.pi + angulo
 
 
 
@@ -61,18 +109,11 @@ operacion={ 'F' : dibujarSegmento, '[' : guardar, ']': restaurar, '+':girarIzq, 
 
 def dibujarCadena(cadena, pantalla):
     for char in cadena:
-        print(char)
-        operacion[char]()
+        #print(char)
+        operacion[char](pantalla)
 
 
 
-
-
-
-pila=[]
-posicion=[900, 500]
-angulo=90
-tamañoRef=15
 
 
 
@@ -86,7 +127,7 @@ BLANCO = (255, 255, 255)
 pygame.init()
  
 # Establecemos el alto y largo de la pantalla
-dimensiones = [1000, 1000]
+dimensiones = [800, 600] #old school
 pantalla = pygame.display.set_mode(dimensiones)
   
 pygame.display.set_caption("Fractales Estocasticos")
@@ -108,17 +149,19 @@ while not hecho:
     pantalla.fill(BLANCO)
   
     # TODO EL CÓDIGO DE DIBUJO DEBERÍA IR DEBAJO DE ESTE COMENTARIO
-    niveles = 3
+    niveles = 8
     cadena="F"
-    for n in range(niveles):
-        pantalla.fill(BLANCO)
-        dibujarCadena(cadena, pantalla)
-        cadena=generarCadena(cadena, reglaEstocastica(33,34,33))
-        pygame.time.delay(1000)
-        pygame.display.flip()
-        print("-------------------------")
-        
+    
+    for n in range(niveles):        
+        cadena=generarCadena(cadena, reglaEstocastica(80,10,10))
 
+    pantalla.fill(BLANCO)
+    dibujarCadena(cadena, pantalla)
+    pygame.time.delay(100)
+    pygame.display.flip()
+    #print("-------------------------")
+    posicion=[400,599]
+    angulo = math.pi    
     # TODO EL CÓDIGO DE DIBUJO DEBERÍA IR ENCIMA DE ESTE COMENTARIO
       
     # # Avancemos y actualicemos la pantalla con lo que hemos dibujado.
