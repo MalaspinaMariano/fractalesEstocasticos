@@ -5,9 +5,11 @@ import re, random, pygame, math
 def reglaEstocastica(peso1, peso2, peso3):
     gramatica={
 
-    'F1' : 'F[+F]F[-F]F',
-    'F2' : 'F[+F]F',
-    'F3' : 'F[-F]F'
+   
+
+    'F1' : 'F+F[F]-F',
+    'F2' : '[+F]F[-F]',
+    'F3' : '[-F]F[+F]'
     }
 
     opciones=['F1', 'F2', 'F3']
@@ -41,7 +43,7 @@ print(cadena)"""
 pila=[]
 posicion=[400, 599]
 angulo=math.pi
-tamanioRef=4
+tamanioRef=30
 
 class Segmento:
     def __init__(self, posicion , angulo):
@@ -63,7 +65,7 @@ def dibujarSegmento(pantalla):
     #posicion[:]
     largo = getLargoSegmento()
     posicionFinal = [getDesplazamientoX(posicion[:][0] , largo, angulo),getDesplazamientoY( posicion[:][1] , largo, angulo)]
-    pygame.draw.line(pantalla,(0,0,0), posicion[:], posicionFinal)
+    pygame.draw.line(pantalla,(0,0,0), posicion[:], posicionFinal, 3)
     posicion[:]=posicionFinal
 
 def guardar(pantalla):
@@ -73,7 +75,7 @@ def guardar(pantalla):
     #print(segmento)
     pilaInterna = pila[:] 
     pilaInterna.append(segmento)
-    #print(pilaInterna)
+    print(len(pilaInterna))
     pila[:]=pilaInterna
     #print(pila[:])
     """pila[:].append(posicion[:])
@@ -81,12 +83,17 @@ def guardar(pantalla):
     pila[:].append(angulo)
     print (posicion[:], angulo)
     print (pila[:])"""
+
+
+
 def restaurar(pantalla):
     #print("estoy desapilando")
     global angulo
-    segmento= pila[:].pop()
+    pilaInterna=pila[:]
+    segmento= pilaInterna.pop()
     angulo = segmento.angulo
     posicion[:] = segmento.posicion
+    pila[:]=pilaInterna
 
 def girarIzq(pantalla):
     #print("estoy girando izq")
@@ -139,22 +146,17 @@ hecho = False
 reloj = pygame.time.Clock()
  
 # -------- Bucle Principal del Programa  -----------
-while not hecho:
-    for evento in pygame.event.get():  # El usuario hizo algo
-        if evento.type == pygame.QUIT: # Si el usuario hace click sobre cerrar
-            hecho = True               # Marca que ya lo hemos hecho, de forma que abandonamos el bucle
              
              
     # Limpia la pantalla y establece su color de fondo
-    pantalla.fill(BLANCO)
+pantalla.fill(BLANCO)
   
     # TODO EL CÓDIGO DE DIBUJO DEBERÍA IR DEBAJO DE ESTE COMENTARIO
-    niveles = 8
-    cadena="F"
+niveles = 7
+cadena="F"
     
-    for n in range(niveles):        
-        cadena=generarCadena(cadena, reglaEstocastica(80,10,10))
-
+for n in range(niveles):        
+    cadena=generarCadena(cadena, reglaEstocastica(34,33,33))
     pantalla.fill(BLANCO)
     dibujarCadena(cadena, pantalla)
     pygame.time.delay(100)
@@ -168,6 +170,10 @@ while not hecho:
  
     # Limitamos a 20 fotogramas por segundo
     reloj.tick(60)
+while not hecho:
+    for evento in pygame.event.get():  # El usuario hizo algo
+        if evento.type == pygame.QUIT: # Si el usuario hace click sobre cerrar
+            hecho = True               # Marca que ya lo hemos hecho, de forma que abandonamos el bucle
       
 # Pórtate bien con el IDLE. Si nos olvidamos de esta línea, el programa se 'colgará'
 # en la salida.
