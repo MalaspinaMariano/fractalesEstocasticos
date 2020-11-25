@@ -1,4 +1,5 @@
-import re, random, pygame, math
+import re, random, pygame, math, sys
+from sys import argv
 
 
 
@@ -69,7 +70,7 @@ def dibujarSegmento(pantalla):
     pygame.draw.line(pantalla,(0,0,0), posicion[:], posicionFinal, 2)
     posicion[:]=posicionFinal
     pygame.display.flip()
-    #pygame.time.delay(20)
+    
 
 def guardar(pantalla):
     #print("estoy apilando")
@@ -132,6 +133,40 @@ def dibujarCadena(cadena, pantalla):
 
 
 
+niveles = 6
+prob1=33
+prob2=34
+prob3=33
+
+llamadaIncorrecta=True
+
+
+
+
+    
+if (len(argv)==3):
+    if(argv[1]=="-n"):
+        try:
+            niveles= int(argv[2])
+        except ValueError:
+            print("Los valores ingresados como parametros deben ser numeros")
+        llamadaIncorrecta=False
+
+if (len(argv)==7):
+    if((argv[1]=="-n") and (argv[3]=="-p") ):
+        try:
+            niveles= int(argv[2])
+            prob1=int(argv[4])
+            prob2=int(argv[5])
+            prob3=int(argv[6])
+        
+            if((prob1+prob2+prob3)==100):
+                llamadaIncorrecta=False    
+        except ValueError:
+            print("Los valores ingresados como parametros deben ser numeros")
+
+if(llamadaIncorrecta):
+    sys.exit("llamada incorrecta, por favor ingrese -n para la cantidad de niveles, y tambien se pueden personalizar agregando las probabilidades -p prob1, prob1, y prob2")
 
 
 
@@ -159,12 +194,14 @@ reloj = pygame.time.Clock()
 pantalla.fill(BLANCO)
   
     # TODO EL CÓDIGO DE DIBUJO DEBERÍA IR DEBAJO DE ESTE COMENTARIO
-niveles = 6
 
-cadena="[F][F][F]"
+
+
+
+cadena="F"
     
 for n in range(niveles):        
-    cadena=generarCadena(cadena, reglaEstocastica(33,34,33))
+    cadena=generarCadena(cadena, reglaEstocastica(prob1,prob2,prob3))
 pantalla.fill(BLANCO)
 dibujarCadena(cadena, pantalla)
     #pygame.time.delay(100)
@@ -183,6 +220,5 @@ while not hecho:
         if evento.type == pygame.QUIT: # Si el usuario hace click sobre cerrar
             hecho = True               # Marca que ya lo hemos hecho, de forma que abandonamos el bucle
       
-# Pórtate bien con el IDLE. Si nos olvidamos de esta línea, el programa se 'colgará'
-# en la salida.
+
 pygame.quit()
