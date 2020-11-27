@@ -22,23 +22,7 @@ def reglaEstocastica(peso1, peso2, peso3):
 def generarCadena( cadenaInicial , regla):
     produccion = re.compile(r'F')
     return re.sub( produccion , regla , cadenaInicial)
-"""
-listaChoices=[]
-for x in range(1000):
-    listaChoices.append(reglaEstocastica(33,34,33))
 
-
-print("F[+F]F[-F]F: "+str(listaChoices.count('F[+F]F[-F]F')))
-print("F[+F]F: "+str(listaChoices.count('F[+F]F')))
-print("F→F[-F]F: "+str(listaChoices.count('F→F[-F]F')))"""
-
-
-
-"""cadena='F'
-for i in range (14):
-    cadena=generarCadena(cadena, reglaEstocastica(33,34,33))
-
-print(cadena)"""
 
 
 pila=[]
@@ -63,8 +47,7 @@ def getDesplazamientoY(y , largo, angulo):
     return y+math.cos(angulo)*largo
 
 def dibujarSegmento(pantalla):
-    #print("estoy dibujando")
-    #posicion[:]
+
     largo = getLargoSegmento()
     posicionFinal = [getDesplazamientoX(posicion[:][0] , largo, angulo),getDesplazamientoY( posicion[:][1] , largo, angulo)]
     pygame.draw.line(pantalla,(0,0,0), posicion[:], posicionFinal, 2)
@@ -73,25 +56,21 @@ def dibujarSegmento(pantalla):
     
 
 def guardar(pantalla):
-    #print("estoy apilando")
+    
     global angulo
     segmento = Segmento(posicion[:],angulo)
-    #print(segmento)
+    
     pilaInterna = pila[:] 
     pilaInterna.append(segmento)
-    #print(len(pilaInterna))
+    
     pila[:]=pilaInterna
-    #print(pila[:])
-    """pila[:].append(posicion[:])
-    pila[:].append(posicion[:])
-    pila[:].append(angulo)
-    print (posicion[:], angulo)
-    print (pila[:])"""
+  
+    
 
 
 
 def restaurar(pantalla):
-    #print("estoy desapilando")
+    
     global angulo
     pilaInterna=pila[:]
     segmento= pilaInterna.pop()
@@ -100,7 +79,7 @@ def restaurar(pantalla):
     pila[:]=pilaInterna
 
 def girarIzq(pantalla):
-    #print("estoy girando izq")
+    
     global angulo
     random.seed()
     angulo+=random.uniform(0.0,math.pi/6)
@@ -108,7 +87,7 @@ def girarIzq(pantalla):
         angulo= angulo - 2*math.pi
 
 def girarDer(pantalla):
-    #print("estoy girando der")
+    
     global angulo
     random.seed()
     angulo-=random.uniform(0.0,math.pi/6)
@@ -122,7 +101,7 @@ operacion={ 'F' : dibujarSegmento, '[' : guardar, ']': restaurar, '+':girarIzq, 
 
 def dibujarCadena(cadena, pantalla):
     for char in cadena:
-        #print(char)
+        
         operacion[char](pantalla)
     print("termine de dibujar")
         
