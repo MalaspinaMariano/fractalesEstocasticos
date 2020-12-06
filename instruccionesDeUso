@@ -1,0 +1,16 @@
+FractalesEst:
+
+Opciones de uso:
+
+probabilidades por defecto(33-34-33) - solo setea niveles:
+
+    /python fractalesEst.py -n N 
+
+    (donde N es la cantidad de iteraciones a ejecutar en el fractal)
+
+setea probabilidades y niveles:
+
+    /python fractalesEst.py -n N -p P1 P2 P3
+
+    (donde N es la cantidad de iteraciones a ejecutar en el fractal y
+    P1,P2,P3 son las probabilidades a setear de las respectivas reglas de reemplazo (deben sumar 100))

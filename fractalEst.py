@@ -1,4 +1,16 @@
-import re, random, pygame, math, sys
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+import re, random, math, sys
+from math import log
+
+
+try:
+    import pygame
+except:
+    print("EL MODULO PYGAME NO ESTA INSTALADO, NO GARANTIZAMOS EL BUEN FUNCIONAMIENTO DEL SCRIPT")
+
+
 from sys import argv
 
 
@@ -19,16 +31,19 @@ def reglaEstocastica(peso1, peso2, peso3):
     
     return gramatica[selected]
 
-def generarCadena( cadenaInicial , regla):
+def generarCadena(cadenaInicial, prob1, prob2, prob3):
     produccion = re.compile(r'F')
-    return re.sub( produccion , regla , cadenaInicial)
+    return re.sub( produccion , reglaEstocastica(prob1, prob2, prob3) , cadenaInicial)
+
 
 
 
 pila=[]
 posicion=[400, 599]
 angulo=math.pi
-tamanioRef=4
+
+def tamanioRef(niv):
+    return 1
 
 class Segmento:
     def __init__(self, posicion , angulo):
@@ -37,8 +52,8 @@ class Segmento:
 
 
 def getLargoSegmento():
-    random.seed()
-    return random.uniform(0.7,3.3)*tamanioRef
+    
+    return random.uniform(0.7,3.3)*tamanioRef(niveles)
 
 def getDesplazamientoX(x , largo, angulo):
     return x+math.sin(angulo)*largo
@@ -51,8 +66,11 @@ def dibujarSegmento(pantalla):
     largo = getLargoSegmento()
     posicionFinal = [getDesplazamientoX(posicion[:][0] , largo, angulo),getDesplazamientoY( posicion[:][1] , largo, angulo)]
     pygame.draw.line(pantalla,(0,0,0), posicion[:], posicionFinal, 2)
+    
     posicion[:]=posicionFinal
     pygame.display.flip()
+    
+    
     
 
 def guardar(pantalla):
@@ -81,7 +99,7 @@ def restaurar(pantalla):
 def girarIzq(pantalla):
     
     global angulo
-    random.seed()
+    
     angulo+=random.uniform(0.0,math.pi/6)
     if (angulo>2*math.pi):
         angulo= angulo - 2*math.pi
@@ -89,7 +107,7 @@ def girarIzq(pantalla):
 def girarDer(pantalla):
     
     global angulo
-    random.seed()
+    
     angulo-=random.uniform(0.0,math.pi/6)
     if (angulo<0):
         angulo= 2*math.pi + angulo
@@ -107,15 +125,10 @@ def dibujarCadena(cadena, pantalla):
         
 
 
-
-
-
-
-
-niveles = 6
-prob1=33
-prob2=34
-prob3=33
+niveles = 5
+prob1=25
+prob2=25
+prob3=50
 
 llamadaIncorrecta=True
 
@@ -172,7 +185,7 @@ reloj = pygame.time.Clock()
     # Limpia la pantalla y establece su color de fondo
 pantalla.fill(BLANCO)
   
-    # TODO EL CÓDIGO DE DIBUJO DEBERÍA IR DEBAJO DE ESTE COMENTARIO
+
 
 
 
@@ -180,24 +193,22 @@ pantalla.fill(BLANCO)
 cadena="F"
     
 for n in range(niveles):        
-    cadena=generarCadena(cadena, reglaEstocastica(prob1,prob2,prob3))
+    cadena=generarCadena(cadena, prob1, prob2, prob3)
 pantalla.fill(BLANCO)
 dibujarCadena(cadena, pantalla)
-    #pygame.time.delay(100)
+  
 pygame.display.flip()
-    #print("-------------------------")
+
 posicion=[400,599]
 angulo = math.pi    
-    # TODO EL CÓDIGO DE DIBUJO DEBERÍA IR ENCIMA DE ESTE COMENTARIO
+  
       
-    # # Avancemos y actualicemos la pantalla con lo que hemos dibujado.
- 
-    # Limitamos a 20 fotogramas por segundo
+
 reloj.tick(20)
 while not hecho:
-    for evento in pygame.event.get():  # El usuario hizo algo
-        if evento.type == pygame.QUIT: # Si el usuario hace click sobre cerrar
-            hecho = True               # Marca que ya lo hemos hecho, de forma que abandonamos el bucle
+    for evento in pygame.event.get():  
+        if evento.type == pygame.QUIT: 
+            hecho = True              
       
 
 pygame.quit()
