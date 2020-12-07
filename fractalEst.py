@@ -53,7 +53,7 @@ class Segmento:
 
 def getLargoSegmento():
     
-    return random.uniform(0.7,3.3)*tamanioRef(niveles)
+    return 550/math.pow(3,niveles)
 
 def getDesplazamientoX(x , largo, angulo):
     return x+math.sin(angulo)*largo
@@ -65,10 +65,12 @@ def dibujarSegmento(pantalla):
 
     largo = getLargoSegmento()
     posicionFinal = [getDesplazamientoX(posicion[:][0] , largo, angulo),getDesplazamientoY( posicion[:][1] , largo, angulo)]
-    pygame.draw.line(pantalla,(0,0,0), posicion[:], posicionFinal, 2)
-    
+    pygame.draw.line(pantalla,(0,0,0), posicion[:], posicionFinal, 1)
+
     posicion[:]=posicionFinal
     pygame.display.flip()
+    
+    
     
     
     
@@ -169,7 +171,7 @@ pygame.init()
  
 # Establecemos el alto y largo de la pantalla
 dimensiones = [800, 600] #old school
-pantalla = pygame.display.set_mode(dimensiones)
+pantalla = pygame.display.set_mode(dimensiones, pygame.RESIZABLE)
   
 pygame.display.set_caption("Fractales Estocasticos")
   
